@@ -70,4 +70,6 @@ new Vue({
 ```
 理解：  
   其实在自定义组件中使用v-model，只是让使用更加简洁了 。 因为v-model 是一个语法糖。  
-  最终的实现父子组建的数据绑定也还是通过eventBus。
+  最终的实现父子组建的数据绑定也还是通过eventBus。  
+  但是vue本来实现了，input change等事件，可以不用在写this.$root.$on 对 input change 事件进行监听。  
+  可以直接触发input change 时间 对 父子组件中的数据进行双向绑定。
