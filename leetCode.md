@@ -90,6 +90,47 @@ var lengthOfLongestSubstring = function(s) {
     return returnStr.length
 };
 ```
+> 错误点：JS中的数组与对象为引用类型。在使用returnArr.push(arr)，arr为数组时，再对arr进行arr.push()操作。 arr 所只想的内存区域push了一个值，而returnArr中含有对arr的引用，所以存在returnArr[0] 所指向的内存区域与 arr所指向的相同 。   
+
+==上诉代码时有问题的，纠正如下==
+```
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var longestPalindrome = function(s) {
+    if(s.length === 1) {return s}
+    let strArr = s.split('')
+    let arr = []
+    let returnArr = []
+    strArr.forEach((val,index) => {
+      let arrIndex = arr.findIndex(value=>{
+        return val === value
+      })
+      arr.push(val)
+      if(arrIndex !== -1){
+        arr = arr.filter(function(v,i){
+          return i>=arrIndex 
+        })
+        returnArr.push(arr.join(''))
+        console.log(returnArr)
+        arr.splice(0,1) 
+      }
+      console.log(returnArr)
+    })
+    console.log(returnArr)
+    if(returnArr.length === 0){return}
+    let point = returnArr[0].length
+    let returnStr = returnArr[0]
+    returnArr.forEach((val,index)=>{
+      if(point < val.length){
+        point = val.length
+        returnStr = val
+      }
+    })
+    return returnStr
+};
+```
 ### 两数组的中位数
 ![](http://ww1.sinaimg.cn/large/9da83df8ly1fnzl3onxdnj20oc0a93yj.jpg)
 ```
@@ -126,5 +167,45 @@ var findMedianSortedArrays = function(nums1, nums2) {
     }else{
       return (nums[index]+nums[index-1])/2
     }
+};
+```
+### 最长重复子串
+![](http://ww1.sinaimg.cn/large/9da83df8ly1fnztci9im7j20o409qq2w.jpg)
+```
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var longestPalindrome = function(s) {
+    if(s.length === 1) {return s}
+    let strArr = s.split('')
+    let arr = []
+    let returnArr = []
+    strArr.forEach((val,index) => {
+      let arrIndex = arr.findIndex(value=>{
+        return val === value
+      })
+      arr.push(val)
+      if(arrIndex !== -1){
+        arr = arr.filter(function(v,i){
+          return i>=arrIndex 
+        })
+        returnArr.push(arr.join(''))
+        console.log(returnArr)
+        arr.splice(0,1) 
+      }
+      console.log(returnArr)
+    })
+    console.log(returnArr)
+    if(returnArr.length === 0){return}
+    let point = returnArr[0].length
+    let returnStr = returnArr[0]
+    returnArr.forEach((val,index)=>{
+      if(point < val.length){
+        point = val.length
+        returnStr = val
+      }
+    })
+    return returnStr
 };
 ```
