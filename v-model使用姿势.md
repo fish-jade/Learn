@@ -278,3 +278,94 @@ prop为v-model所被扩展后的 prop，event为vue已经写好的监听事件�
 > 其实三者原理都基于与eventBus实现  
 但是.sync和v-model 不需要在写对事件的监听。 因为vue已经对 update change input 事件的监听。  
 **若采用eventBus实现，则需要写事件的监听与触发(注意：事件的监听与触发需要在同一个实例上才能被触发)**
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdn.jsdelivr.net/npm/vue "></script>
+  <style>
+    #app div {
+      margin: 20px 0;
+    }
+    .red{
+    	width: 50px;
+    	height:50px;
+		background-color: red;
+    }
+  </style>
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <div>
+      <btn v-model="btn"></btn>
+    {{btn}}
+    </div>
+    <div>
+      <box :value.sync="box"></box>
+      {{box}}
+    </div>
+    <div :class="[active?'red':'']"></div>
+  </div>
+  <script>
+    Vue.component('box', {
+      template: `<div><button @click="add()">+</button></div>`,
+      model: {
+        prop: 'value',
+        event: 'input'
+      },
+      props: ['value'],
+      methods: {
+        add () {
+          this.value++
+          console.log(this.value)
+        }
+      },
+      watch: {
+        value (val,oldVal) {
+          this.$emit('update:value',val)
+        }
+      }
+    })
+    Vue.component('btn', {
+      template: `<div><input v-model="value"/></div>`,
+      model: {
+        prop: 'value',
+        event: 'input'
+      },
+      props: ['value'],
+      // methods: {
+      //   input(){
+      //     this.val++
+      //     console.log(this.val)
+      //     this.$emit('input',this.val)
+      //   }
+      watch: {
+        value (val,oldVal) {
+          this.$emit('input',val)
+        }
+      }
+    })
+    new Vue({
+      el: '#app',
+      created () {
+        this.$root.$on('add',(val)=>{
+          console.log(val)
+          this.boxx = val+1
+        })
+      },
+      data () {
+        return {
+          btn:'123',
+          box:'123',
+          active:true
+        }
+      }
+    })
+  </script>
+</body>
+</html>
+```
